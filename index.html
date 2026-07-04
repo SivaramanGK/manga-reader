@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KOMA — Manga Reader</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">駒</span>
+      <span class="brand-word">KOMA</span>
+    </div>
+    <div class="search-wrap">
+      <input id="searchInput" type="text" placeholder="Search titles…" autocomplete="off" />
+      <button id="searchBtn" aria-label="Search">▸</button>
+    </div>
+    <nav class="topnav">
+      <button class="nav-link active" data-view="browse">Browse</button>
+      <button class="nav-link" data-view="library">My Library</button>
+    </nav>
+  </header>
+
+  <main id="app">
+
+    <!-- BROWSE VIEW -->
+    <section id="view-browse" class="view active">
+      <div class="section-heading">
+        <span class="eyebrow">01 — Trending</span>
+        <h1>Popular right now</h1>
+      </div>
+      <div id="popularGrid" class="manga-grid"></div>
+    </section>
+
+    <!-- SEARCH RESULTS VIEW -->
+    <section id="view-search" class="view">
+      <div class="section-heading">
+        <span class="eyebrow">Results</span>
+        <h1 id="searchTitle">Search</h1>
+      </div>
+      <div id="searchGrid" class="manga-grid"></div>
+    </section>
+
+    <!-- LIBRARY VIEW -->
+    <section id="view-library" class="view">
+      <div class="section-heading">
+        <span class="eyebrow">02 — Yours</span>
+        <h1>My Library</h1>
+      </div>
+      <div id="libraryGrid" class="manga-grid"></div>
+      <p id="libraryEmpty" class="empty-state" hidden>Nothing here yet. Add a title from Browse to start your shelf.</p>
+    </section>
+
+    <!-- MANGA DETAIL VIEW -->
+    <section id="view-detail" class="view">
+      <button class="back-btn" id="backFromDetail">← Back</button>
+      <div class="detail-layout">
+        <img id="detailCover" class="detail-cover" alt="" />
+        <div class="detail-info">
+          <span class="eyebrow" id="detailStatus">Status</span>
+          <h1 id="detailTitle">Title</h1>
+          <p class="detail-author" id="detailAuthor"></p>
+          <div class="tag-row" id="detailTags"></div>
+          <p class="detail-desc" id="detailDesc"></p>
+          <div class="detail-actions">
+            <button id="libraryToggle" class="btn-primary">+ Add to Library</button>
+          </div>
+        </div>
+      </div>
+      <div class="chapter-list-wrap">
+        <div class="section-heading small">
+          <span class="eyebrow">Chapters</span>
+        </div>
+        <div id="chapterList" class="chapter-list"></div>
+      </div>
+    </section>
+
+    <!-- READER VIEW -->
+    <section id="view-reader" class="view reader-view">
+      <div class="reader-bar">
+        <button class="back-btn" id="backFromReader">← Back to chapters</button>
+        <span id="readerChapterLabel" class="reader-label"></span>
+        <span id="pageCounter" class="reader-label"></span>
+      </div>
+      <div id="readerPages" class="reader-pages"></div>
+      <div class="reader-nav">
+        <button id="prevPageBtn">◂ Prev</button>
+        <button id="nextPageBtn">Next ▸</button>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
