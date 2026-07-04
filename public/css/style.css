@@ -234,6 +234,28 @@ button { font-family: inherit; cursor: pointer; }
 .chapter-row .ch-title { flex: 1; font-size: 14px; }
 .chapter-row .ch-group { font-family: var(--font-mono); font-size: 11px; color: var(--screentone); text-align: right; }
 
+/* ---------- Music bar ---------- */
+.music-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 2px solid var(--ink);
+  background: var(--paper-warm);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+.music-btn {
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 6px 12px;
+  text-transform: uppercase;
+}
+.music-btn.playing { background: var(--hanko); color: var(--paper); border-color: var(--hanko); }
+.music-bar input[type="range"] { width: 100px; }
+.music-label { font-family: var(--font-mono); font-size: 11px; color: var(--screentone); }
+
 /* ---------- Reader ---------- */
 .reader-view { max-width: 760px; }
 .reader-bar {
