@@ -66,6 +66,40 @@ and a reverse proxy (Caddy or nginx) for HTTPS.
 Buy one from Namecheap/Porkbun/Google Domains (~$10-15/yr) and point its DNS
 at whichever host you pick (they all document this in their dashboard).
 
+## Featured shelf
+
+The homepage pins specific titles (currently One Piece, Blue Lock, Solo
+Leveling, Jujutsu Kaisen) above the trending grid. Edit the `FEATURED_TITLES`
+array near the top of `server.js` to change which titles show up — they're
+looked up by name on MangaDex each time, not stored.
+
+## Background music in the reader
+
+The reader has a play/pause music bar, but **no actual audio is included** —
+using real anime soundtracks would be copyright infringement. Instead:
+
+1. Find royalty-free action/battle-style tracks you're allowed to use, e.g.
+   [Pixabay Music](https://pixabay.com/music/) (no account needed) or
+   [YouTube Audio Library](https://www.youtube.com/audiolibrary) (free with a
+   Google account).
+2. Download them as `.mp3` and drop them into `public/audio/`, named to
+   match the entries in `MUSIC_MAP` inside `public/js/app.js`:
+   ```
+   public/audio/one-piece.mp3
+   public/audio/blue-lock.mp3
+   public/audio/solo-leveling.mp3
+   public/audio/jujutsu-kaisen.mp3
+   ```
+3. To add a track for a title not in the featured list, add a new line to
+   `MUSIC_MAP` in `public/js/app.js`:
+   ```js
+   "chainsaw man": "/audio/chainsaw-man.mp3",
+   ```
+   The key just needs to be a lowercase substring of the manga's title.
+
+If no track file exists for a title, the reader shows "No track added for
+this title yet" and disables the music button — nothing breaks.
+
 ## A note on scaling the "database"
 
 The current `data.json` file store is fine for a single user testing this

@@ -82,6 +82,25 @@ app.get("/api/popular", async (req, res) => {
   }
 });
 
+// Featured titles — pulls specific manga by name from MangaDex, in order.
+// Add/remove titles here to change what shows in the "Featured" shelf.
+const FEATURED_TITLES = ["One Piece", "Blue Lock", "Solo Leveling", "Jujutsu Kaisen"];
+
+app.get("/api/featured", async (req, res) => {
+  try {
+    const results = [];
+    for (const title of FEATURED_TITLES) {
+      const url = `${MANGADEX_API}/manga?title=${encodeURIComponent(title)}&limit=1&order[relevance]=desc&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&includes[]=cover_art`;
+      const data = await cachedFetch(url);
+      const match = (data.data || [])[0];
+      if (match) results.push(shapeMangaSummary(match));
+    }
+    res.json(results);
+  } catch (err) {
+    res.status(502).json({ error: err.message });
+  }
+});
+
 // Search manga by title
 app.get("/api/search", async (req, res) => {
   try {
