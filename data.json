@@ -1,0 +1,19 @@
+{
+  "library": [
+    {
+      "manga_id": "abc123",
+      "title": "Test Manga",
+      "cover_url": null,
+      "added_at": "2026-07-04T06:31:39.521Z"
+    }
+  ],
+  "progress": {
+    "32d76d19-8a05-4db0-9fc2-e0b0648fe9d0": {
+      "manga_id": "32d76d19-8a05-4db0-9fc2-e0b0648fe9d0",
+      "chapter_id": "ad5931f0-863e-412d-992c-7eb28ca2806c",
+      "chapter_number": "0",
+      "page": 0,
+      "updated_at": "2026-07-04T06:53:40.870Z"
+    }
+  }
+}
