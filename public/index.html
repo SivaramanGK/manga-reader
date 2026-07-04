@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>KOMA — Manga Reader</title>
+<title>Read Manga With Music</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css" />
@@ -12,8 +12,8 @@
 
   <header class="topbar">
     <div class="brand">
-      <span class="brand-mark">駒</span>
-      <span class="brand-word">KOMA</span>
+      <span class="brand-mark">ゾロ</span>
+      <span class="brand-word">Zoro</span>
     </div>
     <div class="search-wrap">
       <input id="searchInput" type="text" placeholder="Search titles…" autocomplete="off" />
@@ -30,6 +30,12 @@
     <!-- BROWSE VIEW -->
     <section id="view-browse" class="view active">
       <div class="section-heading">
+        <span class="eyebrow">00 — Featured</span>
+        <h1>Featured shelf</h1>
+      </div>
+      <div id="featuredGrid" class="manga-grid"></div>
+
+      <div class="section-heading" style="margin-top:48px">
         <span class="eyebrow">01 — Trending</span>
         <h1>Popular right now</h1>
       </div>
@@ -86,18 +92,23 @@
         <span id="readerChapterLabel" class="reader-label"></span>
         <span id="pageCounter" class="reader-label"></span>
       </div>
+      <div class="music-bar">
+        <button id="musicToggle" class="music-btn">♪ Play music</button>
+        <input id="musicVolume" type="range" min="0" max="1" step="0.05" value="0.5" />
+        <span id="musicTrackLabel" class="music-label"></span>
+      </div>
       <div id="readerPages" class="reader-pages"></div>
       <div class="reader-nav">
         <button id="prevPageBtn">◂ Prev</button>
         <button id="nextPageBtn">Next ▸</button>
       </div>
     </section>
-
   </main>
+
+  <audio id="bgMusic" loop preload="none"></audio>
 
   <div id="toast" class="toast" hidden></div>
 
   <script src="/js/app.js"></script>
 </body>
 </html>
-
