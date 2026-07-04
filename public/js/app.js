@@ -12,10 +12,69 @@ const views = {
 };
 
 let currentMangaId = null;
+let currentMangaTitle = "";
 let currentChapters = [];
 let currentPages = [];
 let currentPageIndex = 0;
 let currentChapterMeta = null;
+
+// ---------- Background music ----------
+// Drop your own royalty-free tracks into /public/audio and list them here.
+// Matching is a simple "does the manga title include this key" check, so
+// "One Piece" matches "one piece", etc. Add more entries as you add tracks.
+// Good free sources: pixabay.com/music (no login needed) or
+// youtube.com/audiolibrary (requires a Google account, free to download).
+const MUSIC_MAP = {
+  "one piece": "/audio/one-piece.mp3",
+  "blue lock": "/audio/blue-lock.mp3",
+  "solo leveling": "/audio/solo-leveling.mp3",
+  "jujutsu kaisen": "/audio/jujutsu-kaisen.mp3",
+};
+
+function trackForTitle(title) {
+  const lower = (title || "").toLowerCase();
+  const key = Object.keys(MUSIC_MAP).find((k) => lower.includes(k));
+  return key ? MUSIC_MAP[key] : null;
+}
+
+const bgMusic = document.getElementById("bgMusic");
+const musicToggle = document.getElementById("musicToggle");
+const musicVolume = document.getElementById("musicVolume");
+const musicTrackLabel = document.getElementById("musicTrackLabel");
+
+musicVolume.addEventListener("input", () => {
+  bgMusic.volume = parseFloat(musicVolume.value);
+});
+bgMusic.volume = parseFloat(musicVolume.value);
+
+musicToggle.addEventListener("click", () => {
+  if (!bgMusic.src) return;
+  if (bgMusic.paused) {
+    bgMusic.play().catch(() => toast("Tap again to allow audio playback"));
+    musicToggle.textContent = "♪ Pause music";
+    musicToggle.classList.add("playing");
+  } else {
+    bgMusic.pause();
+    musicToggle.textContent = "♪ Play music";
+    musicToggle.classList.remove("playing");
+  }
+});
+
+function setupMusicForCurrentManga() {
+  const track = trackForTitle(currentMangaTitle);
+  bgMusic.pause();
+  musicToggle.classList.remove("playing");
+  musicToggle.textContent = "♪ Play music";
+  if (track) {
+    bgMusic.src = track;
+    musicToggle.disabled = false;
+    musicTrackLabel.textContent = "";
+  } else {
+    bgMusic.removeAttribute("src");
+    musicToggle.disabled = true;
+    musicTrackLabel.textContent = "No track added for this title yet";
+  }
+}
 
 function showView(name) {
   Object.values(views).forEach((v) => v.classList.remove("active"));
@@ -58,6 +117,23 @@ function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str || "";
   return div.innerHTML;
+}
+
+// ---------- Featured shelf ----------
+async function loadFeatured() {
+  const grid = document.getElementById("featuredGrid");
+  grid.innerHTML = `<p class="empty-state">Loading…</p>`;
+  try {
+    const data = await api("/api/featured");
+    grid.innerHTML = "";
+    if (!data.length) {
+      grid.innerHTML = `<p class="empty-state">Couldn't find the featured titles right now.</p>`;
+      return;
+    }
+    data.forEach((m) => grid.appendChild(mangaCard(m)));
+  } catch (e) {
+    grid.innerHTML = `<p class="empty-state">Couldn't load featured titles.</p>`;
+  }
 }
 
 // ---------- Browse ----------
@@ -121,6 +197,7 @@ async function openDetail(mangaId) {
   currentMangaId = mangaId;
   showView("detail");
   const detail = await api(`/api/manga/${mangaId}`);
+  currentMangaTitle = detail.title;
   document.getElementById("detailCover").src = detail.coverUrl || "";
   document.getElementById("detailTitle").textContent = detail.title;
   document.getElementById("detailStatus").textContent = (detail.status || "").toUpperCase();
@@ -184,6 +261,7 @@ function setLibraryButton(btn, inLib) {
 async function openReader(chapterMeta) {
   currentChapterMeta = chapterMeta;
   showView("reader");
+  setupMusicForCurrentManga();
   document.getElementById("readerChapterLabel").textContent = `Chapter ${chapterMeta.chapter ?? ""} — ${chapterMeta.title || ""}`;
   const pagesWrap = document.getElementById("readerPages");
   pagesWrap.innerHTML = `<p class="empty-state" style="color:#eee">Loading pages…</p>`;
@@ -248,7 +326,12 @@ document.querySelectorAll(".nav-link").forEach((btn) => {
 });
 
 document.getElementById("backFromDetail").addEventListener("click", () => showView("browse"));
-document.getElementById("backFromReader").addEventListener("click", () => openDetail(currentMangaId));
+document.getElementById("backFromReader").addEventListener("click", () => {
+  bgMusic.pause();
+  musicToggle.classList.remove("playing");
+  musicToggle.textContent = "♪ Play music";
+  openDetail(currentMangaId);
+});
 
 document.getElementById("searchBtn").addEventListener("click", () => {
   runSearch(document.getElementById("searchInput").value);
@@ -258,4 +341,5 @@ document.getElementById("searchInput").addEventListener("keydown", (e) => {
 });
 
 // ---------- Init ----------
+loadFeatured();
 loadPopular();
