@@ -92,8 +92,12 @@ app.get("/api/featured", async (req, res) => {
     for (const title of FEATURED_TITLES) {
       const url = `${MANGADEX_API}/manga?title=${encodeURIComponent(title)}&limit=1&order[relevance]=desc&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&includes[]=cover_art`;
       const data = await cachedFetch(url);
-      const match = (data.data || [])[0];
-      if (match) results.push(shapeMangaSummary(match));
+       const match = (data.data || [])[0];
+      if (match) {
+        const shaped = shapeMangaSummary(match);
+        shaped.title = title; // always show the title we asked for
+        results.push(shaped);
+      }
     }
     res.json(results);
   } catch (err) {
